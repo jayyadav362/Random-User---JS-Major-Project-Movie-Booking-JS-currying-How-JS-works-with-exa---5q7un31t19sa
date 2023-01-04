@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState,useEffect} from 'react'
 import '../styles/App.css';
 
 
@@ -71,10 +71,25 @@ import '../styles/App.css';
 //   }
 // }
 const App = () => {
-  
+  const [user,setUser] = useState([]);
+  useEffect(()=>{
+    const url ="https://randomuser.me/api/";
+    const data = fetch(url);
+    data.then(data=>{
+        return data.json();
+    }).then((data)=>{
+      setUser(data.results[0])
+    })  
+  })
   return (
     <div id="main">
-      
+      <button data-attr="age" id="age">Age</button>
+      <button data-attr="email" id="email">Email</button>
+      <button data-attr="phone" id="phone">Phone</button>
+      <section id="user-info">
+      <h3>Additional info</h3>
+      </section>
+      <button id="getUser">New User</button>
     </div>
   )
 }
