@@ -72,24 +72,39 @@ import '../styles/App.css';
 // }
 const App = () => {
   const [user,setUser] = useState([]);
-  useEffect(()=>{
+  const [add,setAdd] = useState('');
+  const getUser =()=>{
     const url ="https://randomuser.me/api/";
     const data = fetch(url);
     data.then(data=>{
         return data.json();
     }).then((data)=>{
-      setUser(data.results[0])
-    })  
-  })
+      setUser(prev => [...prev, data.results[0]])
+    })
+  }
+  useEffect(()=>{
+      getUser()
+  },[])
   return (
     <div id="main">
-      <button data-attr="age" id="age">Age</button>
-      <button data-attr="email" id="email">Email</button>
-      <button data-attr="phone" id="phone">Phone</button>
-      <section id="user-info">
+      <button data-attr="age" onClick={(e) => setAdd('age')}>Age</button>
+      <button data-attr="email" onClick={(e) => setAdd('email')}>Email</button>
+      <button data-attr="phone" onClick={(e) => setAdd('phone')}>Phone</button>
+      <section>
       <h3>Additional info</h3>
+      {user.map((u)=>{
+        return(
+          <>
+          <p>{u?.name?.first} {u?.name?.last}</p>
+          <img src={u?.picture.large} />
+          {add==='age' && <p>{u?.dob?.age}</p>}
+          {add==='email' && <p>{u?.email}</p>}
+          {add==='phone' && <p>{u?.phone}</p>}
+          </>
+        )
+      })}
       </section>
-      <button id="getUser">New User</button>
+      <button id="getUser" onClick={getUser}>New User</button>
     </div>
   )
 }
